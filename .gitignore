@@ -4,3 +4,4 @@ build.log
 .settings
 .project
 node_modules
+tp-*.js

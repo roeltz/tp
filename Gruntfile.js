@@ -1,20 +1,17 @@
 module.exports = function(grunt) {
 
 	grunt.initConfig({
+		pkg: grunt.file.readJSON("package.json"),
 		uglify: {
 			tp: {
-				files: {
-					'tp.js': [
-						'src/fill.js',
-						'src/tp.js'
-					]
-				}
+				files: [{
+					src: ["src/fill.js", "src/tp.js"],
+					dest: "tp-<%= pkg.version %>.js"
+				}]
 			}
 		}
 	});
 
 	grunt.loadNpmTasks('grunt-contrib-uglify');
-	grunt.loadNpmTasks('grunt-contrib-copy');
-	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.registerTask('default', ['uglify']);
 };
