@@ -9,6 +9,9 @@
 	
 })(this, function(fill){
 
+var ELEMENT = 1;
+var TEXT = 3;
+
 var defaults = fill.defaults;
 var defaultOptions = {};
 var directives = {};
@@ -75,9 +78,9 @@ function fillElement(e, data, options) {
 
 	for (var i = 0, c = e.childNodes, l = c.length; i < l; i++) {
 		var ch = c[i];
-		if (ch.nodeType == Element.TEXT_NODE) {
+		if (ch.nodeType == TEXT) {
 			ch.nodeValue = fill(ch.nodeValue, data, options);
-		} else if (ch.nodeType == Element.ELEMENT_NODE && isPermeable(ch)) {
+		} else if (ch.nodeType == ELEMENT && isPermeable(ch)) {
 			fillElement(ch, data, options);
 		}
 	}
@@ -85,6 +88,7 @@ function fillElement(e, data, options) {
 
 function applyDirective(name, e, expression, data, options) {
 	var dir = directives[name];
+	options = options || {};
 
 	if (dir.evaluate && typeof expression == "string") {
 		expression = expression ? evaluateExpression(expression, data, options.context) : data;
@@ -121,7 +125,7 @@ function processDirectives(e, data, options) {
 
 function processChildElements(e, data, options) {
 	for (var i = 0, c = e.childNodes; i < c.length; i++) {
-		if (c[i].nodeType == Element.ELEMENT_NODE) {
+		if (c[i].nodeType == ELEMENT) {
 			processElement(c[i], data, options);
 		}
 	}	
@@ -159,7 +163,7 @@ template.process = processElement;
 
 template.children = function(e) {
 	return Array.prototype.slice.call(e.childNodes).filter(function(n){
-		return n.nodeType == Element.ELEMENT_NODE;
+		return n.nodeType == ELEMENT;
 	});
 };
 
@@ -189,9 +193,9 @@ template.replace = function(t, data, options) {
 	return e;
 };
 
-template.directive("skip", {isolate: true}, function(){});
+template.directive("skip", {preserve: true}, function(){});
 		
-template.directive("context", {isolate: true}, function(e, context, data, options){
+template.directive("context", {preserve: true}, function(e, context, data, options){
 	return template(e, context, options);
 });
 
@@ -200,7 +204,7 @@ template.directive("if", function(e, condition, data, options){
 		return template.empty();
 });
 
-template.directive("repeat", {isolate: true}, function(e, items, data, options){
+template.directive("repeat", {preserve: true}, function(e, items, data, options){
 	var fragment = document.createDocumentFragment();
 	if (items && items.length) {
 		for (var i = 0; i < items.length; i++) {
