@@ -3,3 +3,4 @@ build/
 build.log
 .settings
 .project
+node_modules
