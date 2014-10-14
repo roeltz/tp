@@ -107,7 +107,7 @@ function processDirectives(e, data, options) {
 	var a = Array.prototype.slice.call(e.attributes);
 	for (var i = 0, l = a.length; i < l; i++) {
 		if (a[i].name in directives) {
-			var r = applyDirective(a[i].name, e, a[i].value, data, options);console.log("AFTER", a[i].name, options);
+			var r = applyDirective(a[i].name, e, a[i].value, data, options);
 			if (typeof r != "undefined" && r !== e) {
 				if (e.parentNode) {
 					if (r)
