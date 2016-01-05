@@ -24,6 +24,7 @@ var defaultOptions = {
 	expression: /\{\{([\s\S]+?)\}\}/gm,
 	escape: function(x){ return x; }
 };
+var globalContext = {};
 
 function defaults() {
 	var result = {};
@@ -82,7 +83,7 @@ function fill(string, data, options) {
 		return string;
 	
 	var source = compile(string, options);
-	var context = defaults(options.context, {
+	var context = defaults(globalContext, defaultOptions.context, options.context, {
 		___e: options.escape
 	});
 	var fn = link(source, context);
@@ -95,6 +96,11 @@ fill.link = link;
 
 fill.configure = function(options) {
 	defaultOptions = defaults(defaultOptions, options);
+};
+
+fill.context = function(object) {
+	for (var key in object)
+		globalContext[key] = object[key];
 };
 
 return fill;

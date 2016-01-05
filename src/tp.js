@@ -161,6 +161,7 @@ function template(t, data, options) {
 template.apply = applyDirective;
 template.directive = addDirective;
 template.evaluate = evaluateExpression;
+template.fill = fill;
 template.process = processElement;
 
 template.children = function(e) {
